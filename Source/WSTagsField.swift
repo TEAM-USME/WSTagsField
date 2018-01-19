@@ -54,6 +54,10 @@ open class WSTagsField: UIScrollView {
         didSet { tagViews.forEach { $0.cornerRadius = self.tagCornerRadius } }
     }
 
+    open var tagPadding: (x: CGFloat, y: CGFloat) = (6.0, 2.0) {
+        didSet { tagViews.forEach { $0.padding = tagPadding } }
+    }
+
     open var fieldTextColor: UIColor? {
         didSet { textField.textColor = fieldTextColor }
     }
@@ -203,6 +207,7 @@ open class WSTagsField: UIScrollView {
         tagView.selectedTextColor = self.selectedTextColor
         tagView.displayDelimiter = self.displayDelimiter ? self.delimiter : ""
         tagView.cornerRadius = self.tagCornerRadius
+        tagView.padding = self.tagPadding
 
         tagView.onDidRequestSelection = { [weak self] tagView in
             self?.selectTagView(tagView, animated: true)
@@ -451,7 +456,7 @@ extension WSTagsField {
         }
 
         // Always indent TextField by a little bit
-        curX += max(0, Constants.TEXT_FIELD_HSPACE - self.spaceBetweenTags)
+        curX += max(0, tagPadding.x - self.spaceBetweenTags)
         let textBoundary: CGFloat = isOnFirstLine ? firstLineRightBoundary : rightBoundary
         var availableWidthForTextField: CGFloat = textBoundary - curX
       
@@ -464,7 +469,7 @@ extension WSTagsField {
             // If in the future we add more UI elements below the tags,
             // isOnFirstLine will be useful, and this calculation is important.
             // So leaving it set here, and marking the warning to ignore it
-            curX = padding.left + Constants.TEXT_FIELD_HSPACE
+            curX = padding.left + tagPadding.x
             curY += Constants.STANDARD_ROW_HEIGHT + Constants.VSPACE
             totalHeight += Constants.STANDARD_ROW_HEIGHT
             // Adjust the width
