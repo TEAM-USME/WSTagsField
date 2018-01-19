@@ -492,8 +492,6 @@ extension WSTagsField {
         if oldContentHeight != self.intrinsicContentHeight {
             let newContentHeight = intrinsicContentSize.height
 
-            self.isScrollEnabled = newContentHeight >= self.maxHeight
-
             self.contentSize.width = self.bounds.width
             self.contentSize.height = newContentHeight
             if constraints.isEmpty && newContentHeight < self.maxHeight {
@@ -501,7 +499,6 @@ extension WSTagsField {
             }
         } else
         if frame.size.height != oldContentHeight && constraints.isEmpty {
-            self.isScrollEnabled = oldContentHeight >= self.maxHeight
 
             if oldContentHeight < self.maxHeight {
                 frame.size.height = oldContentHeight
