@@ -92,6 +92,8 @@ open class WSTagsField: UIScrollView {
         didSet { repositionViews() }
     }
 
+    open fileprivate(set) var numberOfLines: Int = 0
+
     open fileprivate(set) var tags = [WSTag]()
     internal var tagViews = [WSTagView]()
     fileprivate var intrinsicContentHeight: CGFloat = 0.0
@@ -423,7 +425,7 @@ extension WSTagsField {
         intrinsicContentHeight = Constants.STANDARD_ROW_HEIGHT
         repositionViews()
     }
-
+    
     fileprivate func repositionViews() {
         let rightBoundary: CGFloat = self.bounds.width - padding.right
         let firstLineRightBoundary: CGFloat = rightBoundary
@@ -431,6 +433,7 @@ extension WSTagsField {
         var curY: CGFloat = padding.top
         var totalHeight: CGFloat = Constants.STANDARD_ROW_HEIGHT
         var isOnFirstLine = true
+        numberOfLines = tagViews.isEmpty ? 0 : 1
 
         // Position Tag views
         var tagRect = CGRect.null
@@ -444,6 +447,7 @@ extension WSTagsField {
                 curY += Constants.STANDARD_ROW_HEIGHT + Constants.VSPACE
                 totalHeight += Constants.STANDARD_ROW_HEIGHT
                 isOnFirstLine = false
+                numberOfLines += 1
             }
 
             tagRect.origin.x = curX
