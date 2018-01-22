@@ -38,11 +38,11 @@ open class WSTagView: UIView {
             setNeedsDisplay()
         }
     }
-    
+
     open var padding: (x: CGFloat, y: CGFloat) = (6.0, 2.0) {
         didSet { setNeedsLayout() }
     }
-    
+
     open override var tintColor: UIColor! {
         didSet { updateContent(animated: false) }
     }
@@ -58,6 +58,9 @@ open class WSTagView: UIView {
     open var selectedTextColor: UIColor? {
         didSet { updateContent(animated: false) }
     }
+
+    open var selectedAnimation: ((WSTagView) -> Void)?
+    open var selectedAnimationCompletion: ((WSTagView) -> Void)?
 
     internal var onDidRequestDelete: ((_ tagView: WSTagView, _ replacementText: String?) -> Void)?
     internal var onDidRequestSelection: ((_ tagView: WSTagView) -> Void)?
@@ -118,16 +121,17 @@ open class WSTagView: UIView {
         UIView.animate(withDuration: 0.3,
                        animations: { [weak self] in
                         self?.updateColors()
-                        if self?.selected ?? false {
-                            self?.transform = CGAffineTransform(scaleX: 1.25, y: 1.25)
+                        if let weakSelf = self, weakSelf.selected {
+                            weakSelf.selectedAnimation?(weakSelf)
                         }
         },
                        completion: { [weak self] _ in
-                        if self?.selected ?? false {
-                            UIView.animate(withDuration: 0.6) { [weak self] in
-                                self?.transform = CGAffineTransform.identity
+                        if let weakSelf = self, weakSelf.selected {
+                            UIView.animate(withDuration: 0.6) { _ in
+                                weakSelf.selectedAnimationCompletion?(weakSelf)
                             }
                         }
+
         })
     }
 

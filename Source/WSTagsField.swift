@@ -137,6 +137,14 @@ open class WSTagsField: UIScrollView {
      */
     open var onDidChangeHeightTo: ((WSTagsField, _ height: CGFloat) -> Void)?
 
+    open var tagSelectedAnimation: ((WSTagView) -> Void)? {
+        didSet { tagViews.forEach { $0.selectedAnimation = tagSelectedAnimation } }
+    }
+
+    open var tagSelectedAnimationCompletion: ((WSTagView) -> Void)? {
+        didSet { tagViews.forEach { $0.selectedAnimationCompletion = tagSelectedAnimationCompletion } }
+    }
+
     // MARK: -
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -210,6 +218,8 @@ open class WSTagsField: UIScrollView {
         tagView.displayDelimiter = self.displayDelimiter ? self.delimiter : ""
         tagView.cornerRadius = self.tagCornerRadius
         tagView.padding = self.tagPadding
+        tagView.selectedAnimation = self.tagSelectedAnimation
+        tagView.selectedAnimationCompletion = self.tagSelectedAnimationCompletion
 
         tagView.onDidRequestSelection = { [weak self] tagView in
             self?.selectTagView(tagView, animated: true)
@@ -425,7 +435,7 @@ extension WSTagsField {
         intrinsicContentHeight = Constants.STANDARD_ROW_HEIGHT
         repositionViews()
     }
-    
+
     fileprivate func repositionViews() {
         let rightBoundary: CGFloat = self.bounds.width - padding.right
         let firstLineRightBoundary: CGFloat = rightBoundary
@@ -463,11 +473,11 @@ extension WSTagsField {
         curX += max(0, tagPadding.x - self.spaceBetweenTags)
         let textBoundary: CGFloat = isOnFirstLine ? firstLineRightBoundary : rightBoundary
         var availableWidthForTextField: CGFloat = textBoundary - curX
-      
+
         if textField.isEnabled {
           var textFieldRect = CGRect.zero
           textFieldRect.size.height = Constants.STANDARD_ROW_HEIGHT
-          
+
           if availableWidthForTextField < Constants.MINIMUM_TEXTFIELD_WIDTH {
             isOnFirstLine = false
             // If in the future we add more UI elements below the tags,
@@ -484,8 +494,7 @@ extension WSTagsField {
           textFieldRect.size.width = availableWidthForTextField
           self.textField.frame = textFieldRect
           textField.isHidden = false
-        }
-        else {
+        } else {
           textField.isHidden = true
         }
 

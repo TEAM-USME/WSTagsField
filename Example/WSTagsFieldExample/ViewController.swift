@@ -25,6 +25,12 @@ class ViewController: UIViewController {
         tagsField.delimiter = " "
         tagsField.tagCornerRadius = 3.0
         tagsField.tagPadding = (6.0, 2.0)
+        tagsField.tagSelectedAnimation = {
+            $0.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+        }
+        tagsField.tagSelectedAnimationCompletion = {
+            $0.transform = .identity
+        }
 
         tagsField.placeholderAlwayVisible = true
         tagsField.maxHeight = 100.0
