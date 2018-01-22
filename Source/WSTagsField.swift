@@ -38,8 +38,8 @@ open class WSTagsField: UIScrollView {
         didSet { tagViews.forEach { $0.selectedTextColor = self.selectedTextColor } }
     }
 
-    open var delimiter: String = "" {
-        didSet { tagViews.forEach { $0.displayDelimiter = self.displayDelimiter ? self.delimiter : "" } }
+    open var delimiter: String? {
+        didSet { tagViews.forEach { $0.displayDelimiter = self.delimiter } }
     }
 
     open var displayDelimiter: Bool = false {
