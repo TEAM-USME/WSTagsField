@@ -330,7 +330,10 @@ open class WSTagsField: UIScrollView {
     }
 
     open func selectTagView(_ tagView: WSTagView, animated: Bool = false) {
-        if self.readOnly { return }
+        if self.readOnly {
+            onDidSelectTagView?(self, tagView)
+            return
+        }
 
         if tagView.selected {
             tagView.onDidRequestDelete?(tagView, nil)
