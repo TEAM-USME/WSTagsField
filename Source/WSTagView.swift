@@ -172,6 +172,11 @@ open class WSTagView: UIView {
     open override func layoutSubviews() {
         super.layoutSubviews()
         textLabel.frame = bounds.insetBy(dx: padding.x, dy: padding.y)
+
+        let font = CTFontCreateWithName(textLabel.font.fontName as CFString, textLabel.font.pointSize, nil)
+        let descentHeight = ceilf(Float(CTFontGetDescent(font)))
+        textLabel.frame.size.height += CGFloat(descentHeight)
+
         if frame.width == 0 || frame.height == 0 {
             frame.size = self.intrinsicContentSize
         }
